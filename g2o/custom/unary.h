@@ -12,7 +12,8 @@ namespace g2o {
 class UnaryObservationEdge
     : public g2o::BaseUnaryEdge<12, SE3Quat, VertexSE3Expmap> {
  public:
-  UnaryObservationEdge(const SE3Quat prior, const Eigen::Matrix3d cov) {
+  UnaryObservationEdge(const SE3Quat prior, const Eigen::Matrix3d cov,
+                       double rinfo = 100) {
     setMeasurement(prior);
     // setInformation(cov.inverse());
 
@@ -28,7 +29,7 @@ class UnaryObservationEdge
     // For flattening
     Eigen::Matrix<double, 12, 12> info;
     info.setZero();
-    info.block<9, 9>(0, 0).setConstant(100);
+    info.block<9, 9>(0, 0).setConstant(rinfo);
     info.block<3, 3>(9, 9) = cov.inverse();
     setInformation(info);
   }
