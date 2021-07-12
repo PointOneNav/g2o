@@ -28,7 +28,7 @@ class UnaryObservationEdge
     // For flattening
     Eigen::Matrix<double, 12, 12> info;
     info.setZero();
-    info.block<9, 9>(0, 0).setConstant(1e6);
+    info.block<9, 9>(0, 0).setConstant(1e12);
     info.block<3, 3>(9, 9) = cov.inverse();
     setInformation(info);
   }
