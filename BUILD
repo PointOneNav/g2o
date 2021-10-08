@@ -178,7 +178,6 @@ cc_library(
         "./",
         "g2o",
         "g2o/core/",
-        "g2o/custom/",
         "g2o/stuff/",
         "g2o/solvers/",
         "g2o/solvers/cholmod",
