@@ -84,7 +84,8 @@ namespace g2o {
 
   void G2OBatchStatistics::setGlobalStats(G2OBatchStatistics* b)
   {
-    _globalStats = b;
+     std::lock_guard<std::mutex> lock(_globalStatsMutex);
+     _globalStats = b;
   }
 
 } // end namespace
