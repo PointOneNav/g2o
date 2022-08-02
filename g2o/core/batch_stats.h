@@ -75,7 +75,13 @@ namespace g2o {
       std::lock_guard<std::mutex> lock(_globalStatsMutex);
       return _globalStats;
     }
-    static void setGlobalStats(G2OBatchStatistics* b);
+
+    static void setGlobalStats(G2OBatchStatistics* b)
+    {
+       std::lock_guard<std::mutex> lock(_globalStatsMutex);
+       _globalStats = b;
+    }
+
     protected:
     static G2OBatchStatistics* _globalStats;
     static std::mutex _globalStatsMutex;
