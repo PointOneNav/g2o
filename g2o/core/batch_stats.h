@@ -71,18 +71,21 @@ namespace g2o {
     size_t hessianLandmarkDimension;  ///< dimension of the landmark matrix in Schur
     size_t choleskyNNZ;               ///< number of non-zeros in the cholesky factor
 
-    static G2OBatchStatistics* globalStats() {
+    static G2OBatchStatistics *globalStats() {
+#ifdef __x86_64__
       std::lock_guard<std::mutex> lock(_globalStatsMutex);
+#endif
       return _globalStats;
     }
 
-    static void setGlobalStats(G2OBatchStatistics* b)
-    {
-       std::lock_guard<std::mutex> lock(_globalStatsMutex);
-       _globalStats = b;
+    static void setGlobalStats(G2OBatchStatistics *b) {
+#ifdef __x86_64__
+      std::lock_guard<std::mutex> lock(_globalStatsMutex);
+#endif
+      _globalStats = b;
     }
 
-    protected:
+  protected:
     static G2OBatchStatistics* _globalStats;
     static std::mutex _globalStatsMutex;
   };
