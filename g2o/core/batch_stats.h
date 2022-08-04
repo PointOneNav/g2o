@@ -29,6 +29,7 @@
 
 #include <iostream>
 #include <vector>
+#include <mutex>
 
 #include "g2o_core_api.h"
 
@@ -70,10 +71,23 @@ namespace g2o {
     size_t hessianLandmarkDimension;  ///< dimension of the landmark matrix in Schur
     size_t choleskyNNZ;               ///< number of non-zeros in the cholesky factor
 
-    static G2OBatchStatistics* globalStats() {return _globalStats;}
-    static void setGlobalStats(G2OBatchStatistics* b);
-    protected:
+    static G2OBatchStatistics *globalStats() {
+#ifdef __x86_64__
+      std::lock_guard<std::mutex> lock(_globalStatsMutex);
+#endif
+      return _globalStats;
+    }
+
+    static void setGlobalStats(G2OBatchStatistics *b) {
+#ifdef __x86_64__
+      std::lock_guard<std::mutex> lock(_globalStatsMutex);
+#endif
+      _globalStats = b;
+    }
+
+  protected:
     static G2OBatchStatistics* _globalStats;
+    static std::mutex _globalStatsMutex;
   };
 
   G2O_CORE_API std::ostream& operator<<(std::ostream&, const G2OBatchStatistics&);
